@@ -91,5 +91,5 @@ public interface IClient extends Closeable {
      * @param requestMessage 请求对象
      * @return 响应对象
      */
-    ResponseMessage invoke(RequestMessage requestMessage);
+    ResponseMessage minvoke(RequestMessage requestMessage);
 }

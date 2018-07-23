@@ -20,6 +20,7 @@ import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -91,7 +92,11 @@ public final class MrpcServer implements IServer {
     @Override
     public IServer register(final Map<String, Object> serverMap) {
         Objects.requireNonNull(serverMap, "serverMap is null");
-        serverMap.forEach(this::register);
+        Iterator<Map.Entry<String, Object>> iterator = serverMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Object> next = iterator.next();
+            register(next.getKey(),next.getValue());
+        }
         return this;
     }
 
@@ -151,21 +156,25 @@ public final class MrpcServer implements IServer {
     private void handler(final IChannel channel) {
         try {
             final RequestMessage request = channel.read(RequestMessage.class);
-            if (Objects.nonNull(request)) {
+            Objects.requireNonNull(request, "request is null");
+            if (request!=null) {
                 final String serverName = request.getServerName();
                 final Object obj = this.serverMap.get(serverName);
                 final Method method = obj.getClass().getMethod(request.getMethodName(), request.getArgsClassTypes());
-                this.executorService.execute(() -> {
-                    Object response = null;
-                    try {
-                        response = method.invoke(obj, request.getArgs());
-                    } catch (final Exception ignored) {
+                this.executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        Object response = null;
+                        try {
+                            response = method.invoke(obj, request.getArgs());
+                        } catch (final Exception ignored) {
+                        }
+                        final ResponseMessage responseMessage = new ResponseMessage();
+                        responseMessage.setSeq(request.getSeq());
+                        responseMessage.setResultCode(ResultCode.SUCCESS);
+                        responseMessage.setResponseObject(response);
+                        channel.write(responseMessage);
                     }
-                    final ResponseMessage responseMessage = new ResponseMessage();
-                    responseMessage.setSeq(request.getSeq());
-                    responseMessage.setResultCode(ResultCode.SUCCESS);
-                    responseMessage.setResponseObject(response);
-                    channel.write(responseMessage);
                 });
             }
         } catch (final Exception e) {

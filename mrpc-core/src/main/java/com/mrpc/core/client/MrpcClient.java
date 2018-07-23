@@ -103,33 +103,36 @@ public final class MrpcClient implements IClient {
 
     @Override
     public <T> T getService(final String name, final Class<T> clazz) {
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, (proxy, method, args) -> {
-            final RequestMessage requestMessage = new RequestMessage();
-            requestMessage.setSeq(UUID.randomUUID().toString().replaceAll("-", ""));
-            requestMessage.setServerName(name);
-            requestMessage.setMethodName(method.getName());
-            if (args !=null && 0 != args.length) {
-                requestMessage.setArgs(args);
-                final Class[] argsClass = new Class[args.length];
-                for (int i = 0; i < args.length; i++) {
-                    argsClass[i] = args[i].getClass();
+      return  (T)Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                final RequestMessage requestMessage = new RequestMessage();
+                requestMessage.setSeq(UUID.randomUUID().toString().replaceAll("-", ""));
+                requestMessage.setServerName(name);
+                requestMessage.setMethodName(method.getName());
+                if (args !=null && 0 != args.length) {
+                    requestMessage.setArgs(args);
+                    final Class[] argsClass = new Class[args.length];
+                    for (int i = 0; i < args.length; i++) {
+                        argsClass[i] = args[i].getClass();
+                    }
+                    requestMessage.setArgsClassTypes(argsClass);
                 }
-                requestMessage.setArgsClassTypes(argsClass);
+                final ResponseMessage responseMessage = minvoke(requestMessage);
+                if (null == responseMessage) {
+                    log.warn("RPC调用返回null....");
+                    return null;
+                }
+                if (responseMessage.getResultCode() != ResultCode.SUCCESS) {
+                    throw new RuntimeException(responseMessage.getErrorMessage());
+                }
+                return responseMessage.getResponseObject();
             }
-            final ResponseMessage responseMessage = this.invoke(requestMessage);
-            if (null == responseMessage) {
-                log.warn("RPC调用返回null....");
-                return null;
-            }
-            if (responseMessage.getResultCode() != ResultCode.SUCCESS) {
-                throw new RuntimeException(responseMessage.getErrorMessage());
-            }
-            return responseMessage.getResponseObject();
         });
     }
 
     @Override
-    public ResponseMessage invoke(final RequestMessage requestMessage) {
+    public ResponseMessage minvoke(final RequestMessage requestMessage) {
         try {
             this.channel.write(requestMessage);
             return this.channel.read(ResponseMessage.class);
@@ -147,7 +150,7 @@ public final class MrpcClient implements IClient {
                     return null;
                 }
                 retry();
-                return invoke(requestMessage);
+                return minvoke(requestMessage);
             }
             final ResponseMessage responseMessage = new ResponseMessage();
             responseMessage.setSeq(requestMessage.getSeq());
