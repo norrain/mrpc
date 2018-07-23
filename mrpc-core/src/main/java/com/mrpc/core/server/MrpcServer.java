@@ -8,6 +8,7 @@ import com.mrpc.core.message.ResponseMessage;
 import com.mrpc.core.message.ResultCode;
 import com.mrpc.core.serializer.ISerializer;
 import com.mrpc.core.serializer.JdkSerializer;
+import com.mrpc.core.utils.MThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -35,9 +35,8 @@ public final class MrpcServer implements IServer {
 
     private final Logger          log             = LoggerFactory.getLogger(getClass());
     private       int             threadSize      = Runtime.getRuntime().availableProcessors() * 2;
-    private       ISerializer     serializer      = new JdkSerializer();
-    private       long            timeout         = 5000;
-    private final ExecutorService executorService = Executors.newFixedThreadPool(10000);
+    private       ISerializer     serializer      = new JdkSerializer();//序列化工具类
+    private       long            timeout         = 5000;//超时时间(毫秒)
 
     private       int                             port;
     private       AsynchronousChannelGroup        group;
@@ -155,13 +154,12 @@ public final class MrpcServer implements IServer {
 
     private void handler(final IChannel channel) {
         try {
-            final RequestMessage request = channel.read(RequestMessage.class);
-            Objects.requireNonNull(request, "request is null");
-            if (request!=null) {
+                final RequestMessage request = channel.read(RequestMessage.class);
+                Objects.requireNonNull(request, "request is null");
                 final String serverName = request.getServerName();
                 final Object obj = this.serverMap.get(serverName);
                 final Method method = obj.getClass().getMethod(request.getMethodName(), request.getArgsClassTypes());
-                this.executorService.execute(new Runnable() {
+                MThreadPool.runInThread(new Runnable() {
                     @Override
                     public void run() {
                         Object response = null;
@@ -176,7 +174,6 @@ public final class MrpcServer implements IServer {
                         channel.write(responseMessage);
                     }
                 });
-            }
         } catch (final Exception e) {
             if (e instanceof MrpcException) {
                 if (channel.isOpen()) {

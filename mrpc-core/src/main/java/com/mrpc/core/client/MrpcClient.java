@@ -33,9 +33,9 @@ public final class MrpcClient implements IClient {
 
     private final Logger      log        = LoggerFactory.getLogger(getClass());
     private       int         threadSize = Runtime.getRuntime().availableProcessors() * 2;
-    private       ISerializer serializer = new JdkSerializer();
-    private       long        timeout    = 5000;
-    private       boolean     retry      = true;
+    private       ISerializer serializer = new JdkSerializer();//序列化工具类
+    private       long        timeout    = 5000;//超时时间(毫秒)
+    private       boolean     retry      = true;//是否重试
 
     private AsynchronousChannelGroup group;
     private IChannel                 channel;
