@@ -1,8 +1,8 @@
 package com.mrpc.core.server;
 
-import com.mrpc.core.channel.FastChannel;
+import com.mrpc.core.channel.MChannel;
 import com.mrpc.core.channel.IChannel;
-import com.mrpc.core.exception.FastrpcException;
+import com.mrpc.core.exception.MrpcException;
 import com.mrpc.core.message.RequestMessage;
 import com.mrpc.core.message.ResponseMessage;
 import com.mrpc.core.message.ResultCode;
@@ -30,7 +30,7 @@ import java.util.concurrent.Executors;
  *
  * @author mark.z
  */
-public final class FastRpcServer implements IServer {
+public final class MrpcServer implements IServer {
 
     private final Logger          log             = LoggerFactory.getLogger(getClass());
     private       int             threadSize      = Runtime.getRuntime().availableProcessors() * 2;
@@ -43,7 +43,7 @@ public final class FastRpcServer implements IServer {
     private       AsynchronousServerSocketChannel channel;
     private final Map<String, Object>             serverMap;
 
-    public FastRpcServer() {
+    public MrpcServer() {
         this.serverMap = new HashMap<>();
     }
 
@@ -123,7 +123,7 @@ public final class FastRpcServer implements IServer {
                 } catch (final IOException e) {
                     log.error("", e);
                 }
-                final IChannel channel = new FastChannel(result, serializer, timeout);
+                final IChannel channel = new MChannel(result, serializer, timeout);
                 while (channel.isOpen()) {
                     handler(channel);
                 }
@@ -169,7 +169,7 @@ public final class FastRpcServer implements IServer {
                 });
             }
         } catch (final Exception e) {
-            if (e instanceof FastrpcException) {
+            if (e instanceof MrpcException) {
                 if (channel.isOpen()) {
                     try {
                         channel.close();

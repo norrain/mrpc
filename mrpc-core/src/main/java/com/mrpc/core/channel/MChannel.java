@@ -1,6 +1,6 @@
 package com.mrpc.core.channel;
 
-import com.mrpc.core.exception.FastrpcException;
+import com.mrpc.core.exception.MrpcException;
 import com.mrpc.core.serializer.ISerializer;
 import com.mrpc.core.message.IMessage;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeoutException;
  *
  * @author mark.z
  */
-public class FastChannel implements IChannel {
+public class MChannel implements IChannel {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -32,7 +32,7 @@ public class FastChannel implements IChannel {
     private final long                      timeout;
 
 
-    public FastChannel(final AsynchronousSocketChannel channel, final ISerializer serializer, final long timeout) {
+    public MChannel(final AsynchronousSocketChannel channel, final ISerializer serializer, final long timeout) {
         this.channel = channel;
         this.serializer = serializer;
         this.timeout = timeout;
@@ -67,7 +67,7 @@ public class FastChannel implements IChannel {
                 message.flip();
                 return this.serializer.encoder(message.array(), messageClazz);
             } catch (final TimeoutException | ExecutionException e) {
-                throw new FastrpcException(e);
+                throw new MrpcException(e);
             } catch (final Exception e) {
                 log.error("读取数据异常", e);
             }
@@ -92,7 +92,7 @@ public class FastChannel implements IChannel {
             }
         } catch (final ExecutionException e) {
             log.warn("连接断了....");
-            throw new FastrpcException(e);
+            throw new MrpcException(e);
         } catch (final Exception e) {
             log.error("写出数据异常", e);
             log.warn("open:{}", this.isOpen());

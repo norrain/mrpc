@@ -1,5 +1,5 @@
 package com.mrpc;
-import com.mrpc.core.server.FastRpcServer;
+import com.mrpc.core.server.MrpcServer;
 
 /**
  * @author mark.z
@@ -7,7 +7,7 @@ import com.mrpc.core.server.FastRpcServer;
 public class ServerTest {
 
     public static void main(String[] args) throws Exception {
-        new FastRpcServer()
+        new MrpcServer()
                 .threadSize(20)
                 .register("test", new TestService())
                 .bind(4567)

@@ -1,8 +1,8 @@
 package com.mrpc.core.client;
 
-import com.mrpc.core.channel.FastChannel;
+import com.mrpc.core.channel.MChannel;
 import com.mrpc.core.channel.IChannel;
-import com.mrpc.core.exception.FastrpcException;
+import com.mrpc.core.exception.MrpcException;
 import com.mrpc.core.message.RequestMessage;
 import com.mrpc.core.message.ResponseMessage;
 import com.mrpc.core.message.ResultCode;
@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.SocketAddress;
 import java.net.StandardSocketOptions;
@@ -27,7 +29,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * @author mark.z
  */
-public final class FastRpcClient implements IClient {
+public final class MrpcClient implements IClient {
 
     private final Logger      log        = LoggerFactory.getLogger(getClass());
     private       int         threadSize = Runtime.getRuntime().availableProcessors() * 2;
@@ -65,7 +67,7 @@ public final class FastRpcClient implements IClient {
                 retry();
             }
         }
-        this.channel = new FastChannel(asynchronousSocketChannel, this.serializer, timeout);
+        this.channel = new MChannel(asynchronousSocketChannel, this.serializer, timeout);
     }
 
     @Override
@@ -106,7 +108,7 @@ public final class FastRpcClient implements IClient {
             requestMessage.setSeq(UUID.randomUUID().toString().replaceAll("-", ""));
             requestMessage.setServerName(name);
             requestMessage.setMethodName(method.getName());
-            if (Objects.nonNull(args) && 0 != args.length) {
+            if (args !=null && 0 != args.length) {
                 requestMessage.setArgs(args);
                 final Class[] argsClass = new Class[args.length];
                 for (int i = 0; i < args.length; i++) {
@@ -134,7 +136,7 @@ public final class FastRpcClient implements IClient {
         } catch (final Exception e) {
             log.error("Rpc调用异常:", e);
             log.debug("是否重试:" + this.retry);
-            if (e instanceof FastrpcException) {
+            if (e instanceof MrpcException) {
                 if (!this.retry) {
                     if (this.channel.isOpen()) {
                         try {
@@ -173,7 +175,7 @@ public final class FastRpcClient implements IClient {
             asynchronousSocketChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
             asynchronousSocketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
             asynchronousSocketChannel.connect(this.socketAddress).get(5, TimeUnit.SECONDS);
-            this.channel = new FastChannel(asynchronousSocketChannel, this.serializer, timeout);
+            this.channel = new MChannel(asynchronousSocketChannel, this.serializer, timeout);
         } catch (final Exception e) {
             retry();
         }

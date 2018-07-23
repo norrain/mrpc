@@ -1,6 +1,6 @@
 package com.mrpc.core.future;
 
-import com.mrpc.core.exception.FastrpcException;
+import com.mrpc.core.exception.MrpcException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ public class CallFuture<T> {
     public T getValue() {
         try {
             if(!this.semaphore.tryAcquire(5, TimeUnit.SECONDS)) {
-                throw new FastrpcException("RPC调用超时，5秒没有返回结果..");
+                throw new MrpcException("RPC调用超时，5秒没有返回结果..");
             }
         } catch (InterruptedException e) {
             log.error("阻塞异常", e);
