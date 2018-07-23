@@ -20,7 +20,7 @@ public interface ISerializer {
      * @throws IOException            异常
      * @throws ClassNotFoundException 异常
      */
-    <M extends IMessage> M encoder(byte[] bytes, Class<M> messageClass) throws IOException, ClassNotFoundException;
+    <T extends IMessage> T encoder(byte[] bytes, Class<T> messageClass) throws IOException, ClassNotFoundException;
 
     /**
      * 序列化ß
