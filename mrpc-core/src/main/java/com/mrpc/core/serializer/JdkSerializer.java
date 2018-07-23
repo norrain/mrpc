@@ -12,11 +12,11 @@ import java.io.*;
 public class JdkSerializer implements ISerializer {
 
     @Override
-    public <M extends IMessage> M encoder(final byte[] bytes, final Class<M> messageClass) throws IOException, ClassNotFoundException {
-        final M message;
+    public <T extends IMessage> T encoder(final byte[] bytes, final Class<T> messageClass) throws IOException, ClassNotFoundException {
+        final T message;
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
         final ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-        message = (M) objectInputStream.readObject();
+        message = (T) objectInputStream.readObject();
         objectInputStream.close();
         inputStream.close();
         return message;
