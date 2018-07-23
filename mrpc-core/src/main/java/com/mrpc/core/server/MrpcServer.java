@@ -1,5 +1,6 @@
 package com.mrpc.core.server;
 
+import com.mrpc.core.annotation.RpcService;
 import com.mrpc.core.channel.MChannel;
 import com.mrpc.core.channel.IChannel;
 import com.mrpc.core.exception.MrpcException;
@@ -8,6 +9,7 @@ import com.mrpc.core.message.ResponseMessage;
 import com.mrpc.core.message.ResultCode;
 import com.mrpc.core.serializer.ISerializer;
 import com.mrpc.core.serializer.JdkSerializer;
+import com.mrpc.core.utils.InfectUtils;
 import com.mrpc.core.utils.MThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,25 +67,31 @@ public final class MrpcServer implements IServer {
 
     @Override
     public IServer timeout(final long timeout) {
-        if (0 < timeout) {
+        if (0 < timeout)
             this.timeout = timeout;
-        } else {
-            log.warn("timeout must > 0");
-        }
+        else
+            log.warn("超时时间应该大于0");
+
         return this;
     }
 
     @Override
     public IServer register(final String name, final Object object) {
-        Objects.requireNonNull(name, "server'name is null");
-        Objects.requireNonNull(object, "server " + name + " is null");
+        Objects.requireNonNull(name, "服务对像的注册名为空");
+        Objects.requireNonNull(object, "要注册的服务对像为空");
         this.serverMap.put(name, object);
         return this;
     }
 
     @Override
     public IServer register(final Object object) {
-        Objects.requireNonNull(object, "server is null");
+        Objects.requireNonNull(object, "注册的服务对像为空");
+        RpcService rpcService = InfectUtils.getInterFaceAnno(object, RpcService.class);
+        if (rpcService != null){
+            Objects.requireNonNull(rpcService.value(), "注册的服务对像注解为空");
+            this.serverMap.put(rpcService.value(), object);
+            return this;
+        }
         this.serverMap.put(object.getClass().getSimpleName(), object);
         return this;
     }
@@ -125,7 +133,7 @@ public final class MrpcServer implements IServer {
                     remoteAddress = result.getRemoteAddress().toString();
                     log.debug("创建连接 {} <-> {}", localAddress, remoteAddress);
                 } catch (final IOException e) {
-                    log.error("", e);
+                    log.error("IOException", e);
                 }
                 final IChannel channel = new MChannel(result, serializer, timeout);
                 while (channel.isOpen()) {

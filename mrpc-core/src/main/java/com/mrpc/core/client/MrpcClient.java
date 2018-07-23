@@ -1,5 +1,6 @@
 package com.mrpc.core.client;
 
+import com.mrpc.core.annotation.RpcService;
 import com.mrpc.core.channel.MChannel;
 import com.mrpc.core.channel.IChannel;
 import com.mrpc.core.exception.MrpcException;
@@ -8,6 +9,7 @@ import com.mrpc.core.message.ResponseMessage;
 import com.mrpc.core.message.ResultCode;
 import com.mrpc.core.serializer.ISerializer;
 import com.mrpc.core.serializer.JdkSerializer;
+import com.mrpc.core.utils.InfectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,6 +100,13 @@ public final class MrpcClient implements IClient {
 
     @Override
     public <T> T getService(final Class<T> clazz) {
+        RpcService rpcService = InfectUtils.getInterFaceAnno(clazz, RpcService.class);
+        System.out.println(rpcService);
+        if (rpcService != null) {
+            Objects.requireNonNull(rpcService.value(), "您要使用的服务对像注解名称为空");
+            return this.getService(rpcService.value(), clazz);
+        }
+
         return this.getService(clazz.getSimpleName(), clazz);
     }
 

@@ -3,7 +3,7 @@ package com.mrpc.core.test.po;
 import java.io.Serializable;
 
 /**
- * @author mark.z 
+ * @author mark.z
  */
 public class User implements Serializable {
 
