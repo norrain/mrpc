@@ -6,7 +6,7 @@ import com.mrpc.core.test.po.User;
 /**
  * @author mark.z
  */
-@RpcService("TTTTT")
+@RpcService("TEST")
 public interface ITestService {
 
     String say(String what);

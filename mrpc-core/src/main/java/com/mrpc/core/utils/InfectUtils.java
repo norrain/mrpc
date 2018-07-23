@@ -19,10 +19,6 @@ public class InfectUtils {
     public static <T> T getInterFaceAnno(Object target,Class<? extends Annotation> anno)
     {
         Objects.requireNonNull(target,"target为空");
-        System.out.println(target instanceof Class);
-        if (target.getClass().isInterface())
-            return (T)target.getClass().getAnnotation(anno);
-
         Class<?>[] interfaces = target.getClass().getInterfaces();
         for (int i = 0; i < interfaces.length; i++) {
             Annotation annotation = interfaces[i].getAnnotation(anno);
