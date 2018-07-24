@@ -4,4 +4,9 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  
+  <context-param>
+    <param-name>webAppRootKey</param-name>
+    <param-value>web.root</param-value>
+  </context-param>
 </web-app>

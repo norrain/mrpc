@@ -3,13 +3,16 @@ package com.mrpc.test.po;
 import java.io.Serializable;
 
 /**
+ * 所有的PO类必须实现序列化Serializable
  * @author mark.z
  */
 public class User implements Serializable {
 
     private String name;
-    private int age;
-    private boolean sex;
+
+    private Integer age;
+
+    private Boolean sex;
 
     public String getName() {
         return name;
@@ -19,19 +22,19 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
-    public boolean isSex() {
+    public Boolean isSex() {
         return sex;
     }
 
-    public void setSex(boolean sex) {
+    public void setSex(Boolean sex) {
         this.sex = sex;
     }
 

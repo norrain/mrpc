@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.StandardSocketOptions;
 import java.nio.channels.AsynchronousChannelGroup;
@@ -45,25 +46,25 @@ public final class MrpcClient implements IClient {
 
 
     @Override
-    public void connect(final SocketAddress address) throws IOException, InterruptedException, ExecutionException, TimeoutException {
-        this.connect(address, false);
+    public void connect(final String address,final Integer port) throws IOException, InterruptedException, ExecutionException, TimeoutException {
+        this.connect(address,port, false);
     }
 
     @Override
-    public void connect(final SocketAddress address, final boolean retry) throws IOException, InterruptedException, ExecutionException, TimeoutException {
+    public void connect(final String address,final Integer port, final boolean retry) throws IOException, InterruptedException, ExecutionException, TimeoutException {
         this.group = AsynchronousChannelGroup.withFixedThreadPool(this.threadSize, Executors.defaultThreadFactory());
         final AsynchronousSocketChannel asynchronousSocketChannel = AsynchronousSocketChannel.open(this.group);
         asynchronousSocketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
         asynchronousSocketChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
         asynchronousSocketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
         this.retry = retry;
-        this.socketAddress = address;
+        this.socketAddress = new InetSocketAddress(address, port);
         try {
-            asynchronousSocketChannel.connect(address).get(5, TimeUnit.SECONDS);
+            asynchronousSocketChannel.connect(socketAddress).get(5, TimeUnit.SECONDS);
         } catch (final InterruptedException | TimeoutException e) {
             log.error("", e);
         } catch (final ExecutionException e) {
-            log.error("连接失败");
+            log.error("连接失败",e);
             log.warn("连接失败 <-> 是否重试:{}", this.retry);
             if (this.retry) retry();
 
