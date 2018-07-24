@@ -100,12 +100,9 @@ public final class MrpcClient implements IClient {
     @Override
     public <T> T getService(final Class<T> clazz) {
         RpcService rpcService = InfectUtils.getInterFaceAnno(clazz, RpcService.class);
-        if (rpcService != null) {
-            Objects.requireNonNull(rpcService.value(), "您要使用的服务对像注解名称为空");
-            return this.getService(rpcService.value(), clazz);
-        }
-
-        return this.getService(clazz.getSimpleName(), clazz);
+        Objects.requireNonNull(rpcService, "您要使用的服务对像注解为空");
+        Objects.requireNonNull(rpcService.value(), "您要使用的服务对像注解名称为空");
+        return this.getService(rpcService.value(), clazz);
     }
 
     @Override
