@@ -4,8 +4,6 @@ import com.mrpc.core.client.MrpcClient;
 import com.mrpc.core.client.IClient;
 import com.mrpc.test.client.ITestService;
 import com.mrpc.test.po.User;
-
-import java.net.InetSocketAddress;
 import java.util.Date;
 
 /**
@@ -16,10 +14,10 @@ public class ClientTest {
     public static void main(String[] args) {
         int errorCount =0;
         long time = new Date().getTime();
-        for (int i = 0; i < 1000 ; i++) {
+        for (int i = 0; i < 100 ; i++) {
             try{
                     IClient client = new MrpcClient();
-                    client.connect(new InetSocketAddress("localhost", 4567));
+                    client.connect("localhost", 4567);
                     ITestService service = client.getService(ITestService.class);
                     String say = service.say("Hello!!!!!!!!!!!!!!!!!!!!!!!");
                     System.out.println(service.name());

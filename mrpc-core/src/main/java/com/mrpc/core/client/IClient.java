@@ -21,12 +21,13 @@ public interface IClient extends Closeable {
      * 需要接连的Rpc服务接口地址
      *
      * @param address Rpc接口地址
+     * @param port 端口
      * @throws IOException          连接异常
      * @throws InterruptedException
      * @throws ExecutionException
      * @throws TimeoutException
      */
-    void connect(SocketAddress address) throws IOException, InterruptedException, ExecutionException, TimeoutException;
+    void connect(String address,Integer port) throws IOException, InterruptedException, ExecutionException, TimeoutException;
 
     /**
      * 需要接连的Rpc服务接口地址
@@ -38,7 +39,7 @@ public interface IClient extends Closeable {
      * @throws ExecutionException
      * @throws TimeoutException
      */
-    void connect(SocketAddress address, boolean retry) throws IOException, InterruptedException, ExecutionException, TimeoutException;
+    void connect(String address,Integer port, boolean retry) throws IOException, InterruptedException, ExecutionException, TimeoutException;
 
     /**
      * 客户端工作线程数
