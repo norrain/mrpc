@@ -7,21 +7,22 @@
     <version>0.1-SNAPSHOT</version>
     <modules>
         <module>mrpc-core</module>
-        <module>mrpc-server</module>
-        <module>mrpc-client</module>
+        <module>mrpc-client-customer</module>
+        <module>mrpc-test-provider</module>
+        <module>mrpc-register</module>
     </modules>
     <packaging>pom</packaging>
 
     <build>
-        <finalName>mrpc</finalName>
+        <finalName>com.mrpc</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>

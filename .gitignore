@@ -22,3 +22,5 @@
 
 #mac file
 .DS_STORE
+
+/target/
