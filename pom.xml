@@ -9,6 +9,7 @@
         <module>mrpc-core</module>
         <module>mrpc-client</module>
         <module>mrpc-test</module>
+        <module>register</module>
     </modules>
     <packaging>pom</packaging>
 
