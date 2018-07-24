@@ -22,6 +22,11 @@
             <artifactId>mrpc-core</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.markrpc</groupId>
+            <artifactId>mrpc-test-client</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

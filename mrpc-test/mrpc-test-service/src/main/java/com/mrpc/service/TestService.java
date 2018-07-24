@@ -1,6 +1,7 @@
-package com.mrpc;
+package com.mrpc.service;
 
-import com.mrpc.core.test.po.User;
+import com.mrpc.test.client.ITestService;
+import com.mrpc.test.po.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

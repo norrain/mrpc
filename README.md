@@ -5,6 +5,6 @@
 ##########################
 项目总共分为三部分 
 mrpc-client 模拟客户端 测试 
-mrpc-server 模拟服务端 测试
+mrpc-test   模拟服务端 测试
 mrpc-core   核心模块
 

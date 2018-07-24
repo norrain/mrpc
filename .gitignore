@@ -22,3 +22,5 @@
 
 #mac file
 .DS_STORE
+/mrpc-test/mrpc-test-server/target/classes
+/mrpc-test/mrpc-test-server/target/test-classes

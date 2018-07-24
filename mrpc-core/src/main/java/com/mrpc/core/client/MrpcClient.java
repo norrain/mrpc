@@ -64,10 +64,9 @@ public final class MrpcClient implements IClient {
             log.error("", e);
         } catch (final ExecutionException e) {
             log.error("连接失败");
-            log.warn("是否重试:{}", this.retry);
-            if (this.retry) {
-                retry();
-            }
+            log.warn("连接失败 <-> 是否重试:{}", this.retry);
+            if (this.retry) retry();
+
         }
         this.channel = new MChannel(asynchronousSocketChannel, this.serializer, timeout);
     }
@@ -180,7 +179,7 @@ public final class MrpcClient implements IClient {
             if (null != this.channel && this.channel.isOpen()) {
                 this.channel.close();
             }
-            log.debug("连接:{}", this.socketAddress.toString());
+            log.debug("连接地址:{}", this.socketAddress.toString());
             final AsynchronousSocketChannel asynchronousSocketChannel = AsynchronousSocketChannel.open(this.group);
             asynchronousSocketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
             asynchronousSocketChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);

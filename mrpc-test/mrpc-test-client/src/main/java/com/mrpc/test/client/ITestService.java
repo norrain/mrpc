@@ -1,7 +1,7 @@
-package com.mrpc.client;
+package com.mrpc.test.client;
 
 import com.mrpc.core.annotation.RpcService;
-import com.mrpc.core.test.po.User;
+import com.mrpc.test.po.User;
 
 /**
  * @author mark.z

@@ -1,4 +1,4 @@
-package com.mrpc.core.test.po;
+package com.mrpc.test.po;
 
 import java.io.Serializable;
 
