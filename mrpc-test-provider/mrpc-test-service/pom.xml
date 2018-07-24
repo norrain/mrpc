@@ -12,11 +12,7 @@
     <artifactId>mrpc-test-service</artifactId>
     <packaging>jar</packaging>
     <dependencies>
-        <dependency>
-            <groupId>com.markrpc</groupId>
-            <artifactId>mrpc-test-client</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
+
     </dependencies>
 
 </project>
