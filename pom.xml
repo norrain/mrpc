@@ -7,9 +7,9 @@
     <version>0.1-SNAPSHOT</version>
     <modules>
         <module>mrpc-core</module>
-        <module>mrpc-client</module>
-        <module>mrpc-test</module>
-        <module>register</module>
+        <module>mrpc-client-customer</module>
+        <module>mrpc-test-provider</module>
+        <module>mrpc-register</module>
     </modules>
     <packaging>pom</packaging>
 
