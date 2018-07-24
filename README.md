@@ -3,7 +3,6 @@
 ##########################
 **简单rpc框架**
 ##########################
-项目总共分为三部分 :
 1. mrpc-client-customer 模拟客户端 测试 （依赖 mrpc-test-client）
 2. mrpc-test-provider   模拟服务端 测试
     * mrpc-test-client  定义接口PO等（依赖 mrpc-core）
