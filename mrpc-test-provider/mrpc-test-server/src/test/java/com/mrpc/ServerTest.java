@@ -1,6 +1,6 @@
 package com.mrpc;
 import com.mrpc.core.server.MrpcServer;
-import com.mrpc.service.TestService;
+import com.mrpc.service.impl.TestService;
 
 /**
  * @author mark.z

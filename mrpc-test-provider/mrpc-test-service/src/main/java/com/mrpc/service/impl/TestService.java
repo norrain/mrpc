@@ -1,4 +1,4 @@
-package com.mrpc.service;
+package com.mrpc.service.impl;
 
 import com.mrpc.test.client.ITestService;
 import com.mrpc.test.po.User;

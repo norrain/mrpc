@@ -16,7 +16,7 @@ public class ClientTest {
     public static void main(String[] args) {
         int errorCount =0;
         long time = new Date().getTime();
-        for (int i = 0; i < 10000 ; i++) {
+        for (int i = 0; i < 1000 ; i++) {
             try{
                     IClient client = new MrpcClient();
                     client.connect(new InetSocketAddress("localhost", 4567));
