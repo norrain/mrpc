@@ -64,7 +64,7 @@ public final class MrpcClient implements IClient {
         } catch (final InterruptedException | TimeoutException e) {
             log.error("", e);
         } catch (final ExecutionException e) {
-            log.error("连接失败");
+            log.error("连接失败",e);
             log.warn("连接失败 <-> 是否重试:{}", this.retry);
             if (this.retry) retry();
 
