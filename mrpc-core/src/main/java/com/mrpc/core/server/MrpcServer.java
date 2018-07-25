@@ -38,7 +38,7 @@ public final class MrpcServer implements IServer {
     private final Logger          log             = LoggerFactory.getLogger(getClass());
     private       int             threadSize      = Runtime.getRuntime().availableProcessors() * 2;
     private       ISerializer     serializer      = new JdkSerializer();//序列化工具类
-    private       long            timeout         = 5000;//超时时间(毫秒)
+    private       long            timeout         = 3000;//超时时间(毫秒)
 
     private       int                             port;
     private       AsynchronousChannelGroup        group;

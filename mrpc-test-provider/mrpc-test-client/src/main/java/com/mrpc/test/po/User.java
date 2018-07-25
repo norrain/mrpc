@@ -14,6 +14,11 @@ public class User implements Serializable {
 
     private Boolean sex;
 
+    public User(String name,Integer age,Boolean sex){
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+    }
     public String getName() {
         return name;
     }

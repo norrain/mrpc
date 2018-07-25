@@ -84,10 +84,12 @@ public class MChannel implements IChannel {
                 byteBuffer.putInt(bytes.length);
                 byteBuffer.put(bytes);
                 byteBuffer.flip();
-                final Integer integer = this.channel.write(byteBuffer).get(timeout, TimeUnit.MILLISECONDS);
-                if (-1 == integer) {
-                    log.warn("连接断了....");
-                    log.warn("open:{}", this.isOpen());
+                synchronized (channel) {
+                    final Integer integer = this.channel.write(byteBuffer).get(timeout, TimeUnit.MILLISECONDS);
+                    if (-1 == integer) {
+                        log.warn("连接断了....");
+                        log.warn("open:{}", this.isOpen());
+                    }
                 }
             }
         } catch (final ExecutionException e) {
