@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>register</artifactId>
+    <artifactId>mrpc-register</artifactId>
     <packaging>war</packaging>
 
     <name>register Maven Webapp</name>
@@ -32,14 +32,9 @@
     </dependencies>
 
     <build>
-        <finalName>register</finalName>
+        <finalName>mrpc-register</finalName>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.0.0</version>
-                </plugin>
-                <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.0.2</version>

@@ -1,0 +1,46 @@
+package com.mrpc.client;
+
+import com.mrpc.core.client.MrpcClient;
+import com.mrpc.core.client.IClient;
+import com.mrpc.core.utils.MThreadPool;
+import com.mrpc.test.client.ITestService;
+import com.mrpc.test.po.User;
+
+import java.util.Date;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * @author mark.z
+ */
+public class ClientTest {
+    //TODO 添加没有服务对象错误处理
+    public static void main(String[] args) {
+        int errorCount =0;
+        long time = new Date().getTime();
+            try{
+                final IClient client = new MrpcClient();
+                 client.connect("127.0.0.1", 4567);
+                final ITestService service = client.getService(ITestService.class);
+                final CountDownLatch countDownLatch = new CountDownLatch(100);
+                final AtomicInteger atomicInteger = new AtomicInteger(0);
+                for (int i = 0; i < 100 ; i++) {
+                    MThreadPool.runInThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println(atomicInteger.getAndAdd(1) + "==========================");
+                            System.out.println(service.name());
+                            System.out.println(service.doUser(new User("mark.z",11,false)));
+                            System.out.println(service.say("Hello World!"));
+                            service.ok("aaaaaaaaaaaaaaaaa");
+                        }
+                    });
+                }
+                //client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        System.out.println(errorCount+"==="+(new Date().getTime() - time));
+    }
+}
