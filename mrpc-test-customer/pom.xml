@@ -6,7 +6,7 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>mrpc-client-customer</artifactId>
+    <artifactId>mrpc-test-customer</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
