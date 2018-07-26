@@ -11,6 +11,7 @@ import com.mrpc.core.serializer.ISerializer;
 import com.mrpc.core.serializer.JdkSerializer;
 import com.mrpc.core.utils.InfectUtils;
 import com.mrpc.core.utils.MThreadPool;
+import com.mrpc.core.utils.Validation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,21 +52,21 @@ public final class MrpcServer implements IServer {
 
     @Override
     public IServer bind(final int port) {
-        assert port>0;
+        Validation.requireAboveNum(port,0);
         this.port = port;
         return this;
     }
 
     @Override
     public IServer threadSize(final int threadSize) {
-        assert threadSize>0;
+        Validation.requireAboveNum(threadSize,0);
         this.threadSize = threadSize;
         return this;
     }
 
     @Override
     public IServer timeout(final long timeout) {
-        assert threadSize>0;
+        Validation.requireAboveNum(timeout,0);
         this.timeout = timeout;
         return this;
     }
