@@ -52,6 +52,8 @@ public final class MrpcClient implements IClient {
 
     @Override
     public void connect(final String address,final Integer port, final boolean retry) throws IOException, InterruptedException, ExecutionException, TimeoutException {
+        Objects.requireNonNull(address,"通信地址address不能为空");
+        Objects.requireNonNull(port,"port不能为空");
         this.group = AsynchronousChannelGroup.withFixedThreadPool(this.threadSize, Executors.defaultThreadFactory());
         final AsynchronousSocketChannel asynchronousSocketChannel = AsynchronousSocketChannel.open(this.group);
         asynchronousSocketChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
@@ -74,32 +76,28 @@ public final class MrpcClient implements IClient {
 
     @Override
     public IClient threadSize(final int threadSize) {
-        if (0 < threadSize) {
-            this.threadSize = threadSize;
-        } else {
-            log.warn("threadSize must > 0!");
-        }
+        assert threadSize>0;
+        this.threadSize = threadSize;
         return this;
     }
 
     @Override
     public IClient serializer(final ISerializer serializer) {
+        Objects.requireNonNull(serializer,"序列化对象不能为空");
         this.serializer = serializer;
         return this;
     }
 
     @Override
     public IClient timeout(final long timeout) {
-        if (0 < timeout) {
-            this.timeout = timeout;
-        } else {
-            log.warn("timeout must > 0!");
-        }
+        assert timeout>0;
+        this.timeout = timeout;
         return this;
     }
 
     @Override
     public <T> T getService(final Class<T> clazz) {
+        Objects.requireNonNull(clazz);
         RpcService rpcService = InfectUtils.getInterFaceAnno(clazz, RpcService.class);
         Objects.requireNonNull(rpcService, "您要使用的服务对像注解为空");
         Objects.requireNonNull(rpcService.value(), "您要使用的服务对像注解名称为空");
@@ -108,6 +106,8 @@ public final class MrpcClient implements IClient {
 
     @Override
     public <T> T getService(final String name, final Class<T> clazz) {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(clazz);
       return  (T)Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -142,7 +142,7 @@ public final class MrpcClient implements IClient {
             this.channel.write(requestMessage);
             return this.channel.read(ResponseMessage.class);
         } catch (final Exception e) {
-            log.error("Rpc调用异常:", e);
+            log.error("调用异常:", e);
             log.debug("是否重试:" + this.retry);
             if (e instanceof MrpcException) {
                 if (!this.retry) {
