@@ -22,22 +22,15 @@ public class ClientTest {
                 final IClient client = new MrpcClient();
                  client.connect("127.0.0.1", 4567);
                 final ITestService service = client.getService(ITestService.class);
-                final CountDownLatch countDownLatch = new CountDownLatch(100);
-                final AtomicInteger atomicInteger = new AtomicInteger(0);
                 for (int i = 0; i < 100 ; i++) {
-                    MThreadPool.runInThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println(atomicInteger.getAndAdd(1) + "==========================");
                             System.out.println(service.name());
                             System.out.println(service.doUser(new User("mark.z",11,false)));
                             System.out.println(service.say("Hello World!"));
                             service.ok("aaaaaaaaaaaaaaaaa");
-                        }
-                    });
                 }
                 //client.close();
             } catch (Exception e) {
+                errorCount++;
                 e.printStackTrace();
             }
 
