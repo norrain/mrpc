@@ -30,6 +30,7 @@ public class ClientTest {
                 }
                 //client.close();
             } catch (Exception e) {
+                errorCount++;
                 e.printStackTrace();
             }
 
