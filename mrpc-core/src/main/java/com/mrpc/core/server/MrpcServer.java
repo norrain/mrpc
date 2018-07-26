@@ -51,27 +51,22 @@ public final class MrpcServer implements IServer {
 
     @Override
     public IServer bind(final int port) {
+        assert port>0;
         this.port = port;
         return this;
     }
 
     @Override
     public IServer threadSize(final int threadSize) {
-        if (0 < threadSize) {
-            this.threadSize = threadSize;
-        } else {
-            log.warn("threadSize must > 0!");
-        }
+        assert threadSize>0;
+        this.threadSize = threadSize;
         return this;
     }
 
     @Override
     public IServer timeout(final long timeout) {
-        if (0 < timeout)
-            this.timeout = timeout;
-        else
-            log.warn("超时时间应该大于0");
-
+        assert threadSize>0;
+        this.timeout = timeout;
         return this;
     }
 
@@ -98,7 +93,7 @@ public final class MrpcServer implements IServer {
 
     @Override
     public IServer register(final Map<String, Object> serverMap) {
-        Objects.requireNonNull(serverMap, "serverMap is null");
+        Objects.requireNonNull(serverMap, "serverMap对像不能为空");
         Iterator<Map.Entry<String, Object>> iterator = serverMap.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Object> next = iterator.next();
@@ -109,13 +104,14 @@ public final class MrpcServer implements IServer {
 
     @Override
     public IServer serializer(final ISerializer serializer) {
+        Objects.requireNonNull(serializer,"序列化对象不能为空");
         this.serializer = serializer;
         return this;
     }
 
     @Override
     public void start() throws IOException {
-        log.debug("开始启动RPC服务端......");
+        log.info("开始启动RPC服务端......");
         this.group = AsynchronousChannelGroup.withFixedThreadPool(this.threadSize, Executors.defaultThreadFactory());
         this.channel = AsynchronousServerSocketChannel
                 .open(this.group)
