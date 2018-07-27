@@ -140,8 +140,10 @@ public final class MrpcClient implements IClient {
     @Override
     public ResponseMessage minvoke(final RequestMessage requestMessage) {
         try {
-            this.channel.write(requestMessage);
-            return this.channel.read(ResponseMessage.class);
+            synchronized (channel) {
+                this.channel.write(requestMessage);
+                return this.channel.read(ResponseMessage.class);
+            }
         } catch (final Exception e) {
             log.error("调用异常:", e);
             log.debug("是否重试:" + this.retry);
