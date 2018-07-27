@@ -13,24 +13,20 @@ import java.util.Date;
 public class ClientTest {
     //TODO 添加没有服务对象错误处理
     public static void main(String[] args) {
-        int errorCount =0;
+        int loopNum =100;
         long time = new Date().getTime();
-            try{
-                final IClient client = new MrpcClient();
-                 client.connect("127.0.0.1", 4567);
-                final ITestService service = client.getService(ITestService.class);
-                for (int i = 0; i < 100 ; i++) {
-                            System.out.println(service.name());
-                            System.out.println(service.doUser(new User("mark.z",11,false)));
-                            System.out.println(service.say("Hello World!"));
-                            service.ok("aaaaaaaaaaaaaaaaa");
-                }
-                 client.close();
-            } catch (Exception e) {
-                errorCount++;
-                e.printStackTrace();
+        try(IClient client = new MrpcClient()){
+            client.connect("127.0.0.1", 4567);
+            ITestService service = client.getService(ITestService.class);
+            for (int i = 0; i < loopNum ; i++) {
+                System.out.println(service.name());
+                System.out.println(service.doUser(new User("mark.z_"+i,i,false)));
+                System.out.println(service.say("Hello World!"));
+                service.ok("TEST MARK");
             }
-
-        System.out.println(errorCount+"==="+(new Date().getTime() - time));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("===总共耗时==="+(new Date().getTime() - time));
     }
 }
