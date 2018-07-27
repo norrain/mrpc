@@ -6,12 +6,8 @@ import com.mrpc.core.utils.MThreadPool;
 import com.mrpc.test.client.ITestService;
 import com.mrpc.test.po.User;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 并发测试
