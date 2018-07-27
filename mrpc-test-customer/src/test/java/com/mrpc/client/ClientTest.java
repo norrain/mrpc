@@ -28,7 +28,7 @@ public class ClientTest {
                             System.out.println(service.say("Hello World!"));
                             service.ok("aaaaaaaaaaaaaaaaa");
                 }
-                //client.close();
+                 client.close();
             } catch (Exception e) {
                 errorCount++;
                 e.printStackTrace();
