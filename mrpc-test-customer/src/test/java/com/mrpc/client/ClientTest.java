@@ -2,13 +2,10 @@ package com.mrpc.client;
 
 import com.mrpc.core.client.MrpcClient;
 import com.mrpc.core.client.IClient;
-import com.mrpc.core.utils.MThreadPool;
 import com.mrpc.test.client.ITestService;
 import com.mrpc.test.po.User;
 
 import java.util.Date;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author mark.z
