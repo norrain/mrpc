@@ -1,6 +1,6 @@
 package com.mrpc.core.client;
 
-import com.mrpc.core.annotation.RpcService;
+import com.mrpc.core.annotation.RpcClient;
 import com.mrpc.core.channel.MChannel;
 import com.mrpc.core.channel.IChannel;
 import com.mrpc.core.exception.MrpcException;
@@ -99,7 +99,7 @@ public final class MrpcClient implements IClient {
     @Override
     public <T> T getService(final Class<T> clazz) {
         Objects.requireNonNull(clazz);
-        RpcService rpcService = InfectUtils.getInterFaceAnno(clazz, RpcService.class);
+        RpcClient rpcService = InfectUtils.getInterFaceAnno(clazz, RpcClient.class);
         Objects.requireNonNull(rpcService, "您要使用的服务对像注解为空");
         Objects.requireNonNull(rpcService.value(), "您要使用的服务对像注解名称为空");
         return this.getService(rpcService.value(), clazz);

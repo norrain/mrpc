@@ -1,6 +1,6 @@
 package com.mrpc.core.server;
 
-import com.mrpc.core.annotation.RpcService;
+import com.mrpc.core.annotation.RpcServer;
 import com.mrpc.core.channel.MChannel;
 import com.mrpc.core.channel.IChannel;
 import com.mrpc.core.exception.MrpcException;
@@ -82,7 +82,7 @@ public final class MrpcServer implements IServer {
     @Override
     public IServer register(final Object object) {
         Objects.requireNonNull(object, "注册的服务对像为空");
-        RpcService rpcService = InfectUtils.getInterFaceAnno(object, RpcService.class);
+        RpcServer rpcService = InfectUtils.getInterFaceAnno(object.getClass(), RpcServer.class);
         if (rpcService != null){
             Objects.requireNonNull(rpcService.value(), "注册的服务对像注解为空");
             this.serverMap.put(rpcService.value(), object);
