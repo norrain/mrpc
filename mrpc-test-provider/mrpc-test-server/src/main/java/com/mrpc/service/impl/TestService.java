@@ -1,5 +1,6 @@
 package com.mrpc.service.impl;
 
+import com.mrpc.core.annotation.RpcServer;
 import com.mrpc.test.client.ITestService;
 import com.mrpc.test.po.User;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author mark.z
  */
+@RpcServer("TEST")
 public class TestService implements ITestService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
